@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Braille Keyboard with Live Dots</title>
+    <title>Braille Keyboard</title>
     <style>
         * {
             box-sizing: border-box;
@@ -103,7 +103,6 @@
             display: grid;
             grid-template-columns: repeat(2, 1fr);
             gap: 6px;
-            margin-bottom: 5px;
         }
         .braille-cell {
             width: 20px;
@@ -115,11 +114,6 @@
         .braille-cell.on {
             opacity: 1;
             background-color: #000;
-        }
-        .character-label {
-            font-size: 14px;
-            font-weight: bold;
-            margin-top: 5px;
         }
         #text-output {
             font-size: 18px;
@@ -144,7 +138,7 @@
 </head>
 <body>
     <div class="container">
-        <h1>Braille Keyboard with Live Dots</h1>
+        <h1>Braille Keyboard</h1>
         
         <div class="input-section">
             <div class="section-title">Braille Input</div>
@@ -158,29 +152,51 @@
         
         <div class="keyboard-container">
             <div class="braille-keyboard">
-                <!-- First Row -->
+                <!-- Row 1 -->
                 <div class="braille-key" data-char="a">⠁</div>
                 <div class="braille-key" data-char="b">⠃</div>
                 <div class="braille-key" data-char="c">⠉</div>
                 <div class="braille-key function-key backspace-key" id="backspace">⌫</div>
                 
-                <!-- Second Row -->
+                <!-- Row 2 -->
                 <div class="braille-key" data-char="d">⠙</div>
                 <div class="braille-key" data-char="e">⠑</div>
                 <div class="braille-key" data-char="f">⠋</div>
                 <div class="braille-key function-key" id="clear">Clear</div>
                 
-                <!-- Third Row -->
+                <!-- Row 3 -->
                 <div class="braille-key" data-char="g">⠛</div>
                 <div class="braille-key" data-char="h">⠓</div>
                 <div class="braille-key" data-char="i">⠊</div>
                 <div class="braille-key function-key" id="convert-text">To Text</div>
                 
-                <!-- Fourth Row -->
+                <!-- Row 4 -->
                 <div class="braille-key" data-char="j">⠚</div>
                 <div class="braille-key" data-char="k">⠅</div>
                 <div class="braille-key" data-char="l">⠇</div>
                 <div class="braille-key space-key" data-char=" ">Space</div>
+                
+                <!-- Row 5 -->
+                <div class="braille-key" data-char="m">⠍</div>
+                <div class="braille-key" data-char="n">⠝</div>
+                <div class="braille-key" data-char="o">⠕</div>
+                <div class="braille-key" data-char="p">⠏</div>
+                
+                <!-- Row 6 -->
+                <div class="braille-key" data-char="q">⠟</div>
+                <div class="braille-key" data-char="r">⠗</div>
+                <div class="braille-key" data-char="s">⠎</div>
+                <div class="braille-key" data-char="t">⠞</div>
+                
+                <!-- Row 7 -->
+                <div class="braille-key" data-char="u">⠥</div>
+                <div class="braille-key" data-char="v">⠧</div>
+                <div class="braille-key" data-char="w">⠺</div>
+                <div class="braille-key" data-char="x">⠭</div>
+                
+                <!-- Row 8 -->
+                <div class="braille-key" data-char="y">⠽</div>
+                <div class="braille-key" data-char="z">⠵</div>
             </div>
         </div>
     </div>
@@ -254,12 +270,7 @@
                         dotGrid.appendChild(dot);
                     }
                     
-                    const label = document.createElement('div');
-                    label.className = 'character-label';
-                    label.textContent = char === ' ' ? 'SPACE' : char.toUpperCase();
-                    
                     container.appendChild(dotGrid);
-                    container.appendChild(label);
                     brailleInput.appendChild(container);
                 }
             });
