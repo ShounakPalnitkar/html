@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Braille Keyboard</title>
+    <title>Universal Braille Keyboard</title>
     <style>
         * {
             box-sizing: border-box;
@@ -17,13 +17,14 @@
             touch-action: manipulation;
         }
         .container {
-            max-width: 100%;
+            max-width: 800px;
             margin: 0 auto;
         }
         h1 {
             text-align: center;
             font-size: 1.5rem;
             color: #333;
+            margin-bottom: 20px;
         }
         .input-section {
             background-color: white;
@@ -46,7 +47,7 @@
         }
         .keyboard-container {
             background-color: #e0e0e0;
-            border-radius: 10px;
+            border-radius: 8px;
             padding: 10px;
             margin-bottom: 15px;
         }
@@ -57,7 +58,7 @@
         }
         .braille-key {
             background-color: #fff;
-            border-radius: 8px;
+            border-radius: 6px;
             height: 50px;
             display: flex;
             align-items: center;
@@ -65,14 +66,13 @@
             font-size: 20px;
             cursor: pointer;
             user-select: none;
-            box-shadow: 0 2px 3px rgba(0,0,0,0.1);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
             transition: all 0.1s;
             touch-action: manipulation;
-            grid-column: span 1;
         }
         .braille-key:active {
             background-color: #ddd;
-            transform: scale(0.95);
+            transform: scale(0.98);
         }
         .function-key {
             background-color: #4a90e2;
@@ -97,7 +97,7 @@
         .braille-dots-container {
             display: flex;
             flex-wrap: wrap;
-            gap: 12px;
+            gap: 10px;
             margin-bottom: 15px;
         }
         .braille-character-container {
@@ -131,10 +131,7 @@
             border-radius: 5px;
             border: 1px solid #eee;
         }
-        .keyboard-row {
-            display: contents;
-        }
-        @media (max-width: 600px) {
+        @media (max-width: 768px) {
             .braille-keyboard {
                 grid-template-columns: repeat(5, 1fr);
             }
@@ -147,12 +144,26 @@
             .enter-key {
                 grid-column: span 2;
             }
+            .braille-key {
+                height: 45px;
+                font-size: 18px;
+            }
+        }
+        @media (max-width: 480px) {
+            .braille-key {
+                height: 40px;
+                font-size: 16px;
+            }
+            .braille-cell {
+                width: 14px;
+                height: 14px;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Braille Keyboard</h1>
+        <h1>Universal Braille Keyboard</h1>
         
         <div class="input-section">
             <div class="section-title">Braille Input</div>
@@ -166,7 +177,7 @@
         
         <div class="keyboard-container">
             <div class="braille-keyboard">
-                <!-- First Row -->
+                <!-- First Row (10 letters) -->
                 <div class="braille-key" data-char="a">⠁</div>
                 <div class="braille-key" data-char="b">⠃</div>
                 <div class="braille-key" data-char="c">⠉</div>
@@ -178,7 +189,7 @@
                 <div class="braille-key" data-char="i">⠊</div>
                 <div class="braille-key" data-char="j">⠚</div>
                 
-                <!-- Second Row -->
+                <!-- Second Row (10 letters) -->
                 <div class="braille-key" data-char="k">⠅</div>
                 <div class="braille-key" data-char="l">⠇</div>
                 <div class="braille-key" data-char="m">⠍</div>
@@ -190,7 +201,7 @@
                 <div class="braille-key" data-char="s">⠎</div>
                 <div class="braille-key" data-char="t">⠞</div>
                 
-                <!-- Third Row -->
+                <!-- Third Row (6 letters + 4 function keys) -->
                 <div class="braille-key" data-char="u">⠥</div>
                 <div class="braille-key" data-char="v">⠧</div>
                 <div class="braille-key" data-char="w">⠺</div>
@@ -198,7 +209,7 @@
                 <div class="braille-key" data-char="y">⠽</div>
                 <div class="braille-key" data-char="z">⠵</div>
                 <div class="braille-key function-key" id="clear">Clear</div>
-                <div class="braille-key function-key backspace-key" id="backspace">⌫ Backspace</div>
+                <div class="braille-key function-key backspace-key" id="backspace">⌫</div>
                 <div class="braille-key function-key" id="convert-text">To Text</div>
                 
                 <!-- Space Bar Row -->
@@ -299,7 +310,7 @@
 
         function vibrateFeedback() {
             if ("vibrate" in navigator) {
-                navigator.vibrate(30);
+                navigator.vibrate(20);
             }
         }
 
