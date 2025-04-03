@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Braille Keyboard with Live Dots</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 10px;
+            background-color: #f5f5f5;
+            touch-action: manipulation;
+        }
+        .container {
+            max-width: 100%;
+            margin: 0 auto;
+        }
+        h1 {
+            text-align: center;
+            font-size: 1.5rem;
+            color: #333;
+        }
+        #text-input {
+            width: 100%;
+            padding: 12px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            background-color: white;
+            min-height: 100px;
+        }
+        .keyboard-container {
+            background-color: #e0e0e0;
+            border-radius: 10px;
+            padding: 10px;
+            margin-bottom: 15px;
+        }
+        .braille-keyboard {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+        }
+        .braille-key {
+            background-color: #fff;
+            border-radius: 8px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            cursor: pointer;
+            user-select: none;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            transition: all 0.1s;
+            touch-action: manipulation;
+        }
+        .braille-key:active {
+            background-color: #ddd;
+            transform: scale(0.95);
+        }
+        .function-key {
+            background-color: #4a90e2;
+            color: white;
+            font-size: 18px;
+        }
+        .space-key {
+            grid-column: span 2;
+            background-color: #f0f0f0;
+            font-size: 16px;
+        }
+        .backspace-key {
+            background-color: #e74c3c;
+            color: white;
+        }
+        .output-section {
+            background-color: white;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 15px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .output-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #333;
+        }
+        .braille-dots-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        .braille-character-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .braille-dot-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+            margin-bottom: 5px;
+        }
+        .braille-cell {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background-color: #333;
+            opacity: 0.2;
+        }
+        .braille-cell.on {
+            opacity: 1;
+            background-color: #000;
+        }
+        .character-label {
+            font-size: 16px;
+            font-weight: bold;
+        }
+        #text-output {
+            font-size: 18px;
+            min-height: 30px;
+            word-wrap: break-word;
+            padding: 10px;
+            background-color: #f9f9f9;
+            border-radius: 5px;
+        }
+        @media (max-width: 400px) {
+            .braille-key {
+                height: 50px;
+                font-size: 20px;
+            }
+            .braille-cell {
+                width: 20px;
+                height: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Braille Keyboard with Live Dots</h1>
+        
+        <textarea id="text-input" placeholder="Type using Braille characters below..." readonly></textarea>
+        
+        <div class="output-section">
+            <div class="output-title">Braille Dot Patterns (Live)</div>
+            <div id="braille-output" class="braille-dots-container"></div>
+        </div>
+        
+        <div class="output-section">
+            <div class="output-title">English Text Output</div>
+            <div id="text-output">Press "Convert to Text" button below</div>
+        </div>
+        
+        <div class="keyboard-container">
+            <div class="braille-keyboard">
+                <!-- First Row -->
+                <div class="braille-key" data-char="a">⠁</div>
+                <div class="braille-key" data-char="b">⠃</div>
+                <div class="braille-key" data-char="c">⠉</div>
+                <div class="braille-key function-key" id="backspace">⌫</div>
+                
+                <!-- Second Row -->
+                <div class="braille-key" data-char="d">⠙</div>
+                <div class="braille-key" data-char="e">⠑</div>
+                <div class="braille-key" data-char="f">⠋</div>
+                <div class="braille-key function-key" id="clear">Clear</div>
+                
+                <!-- Third Row -->
+                <div class="braille-key" data-char="g">⠛</div>
+                <div class="braille-key" data-char="h">⠓</div>
+                <div class="braille-key" data-char="i">⠊</div>
+                <div class="braille-key function-key" id="convert-text">Convert to Text</div>
+                
+                <!-- Fourth Row -->
+                <div class="braille-key" data-char="j">⠚</div>
+                <div class="braille-key" data-char="k">⠅</div>
+                <div class="braille-key" data-char="l">⠇</div>
+                <div class="braille-key space-key" data-char=" ">Space</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Braille alphabet dictionary
+        const brailleAlphabet = {
+            "a": [1, 0, 0, 0, 0, 0], "b": [1, 1, 0, 0, 0, 0], "c": [1, 0, 0, 1, 0, 0],
+            "d": [1, 0, 0, 1, 1, 0], "e": [1, 0, 0, 0, 1, 0], "f": [1, 1, 0, 1, 0, 0],
+            "g": [1, 1, 0, 1, 1, 0], "h": [1, 1, 0, 0, 1, 0], "i": [0, 1, 0, 1, 0, 0],
+            "j": [0, 1, 0, 1, 1, 0], "k": [1, 0, 1, 0, 0, 0], "l": [1, 1, 1, 0, 0, 0],
+            "m": [1, 0, 1, 1, 0, 0], "n": [1, 0, 1, 1, 1, 0], "o": [1, 0, 1, 0, 1, 0],
+            "p": [1, 1, 1, 1, 0, 0], "q": [1, 1, 1, 1, 1, 0], "r": [1, 1, 1, 0, 1, 0],
+            "s": [0, 1, 1, 1, 0, 0], "t": [0, 1, 1, 1, 1, 0], "u": [1, 0, 1, 0, 0, 1],
+            "v": [1, 1, 1, 0, 0, 1], "w": [0, 1, 0, 1, 1, 1], "x": [1, 0, 1, 1, 0, 1],
+            "y": [1, 0, 1, 1, 1, 1], "z": [1, 0, 1, 0, 1, 1],
+            " ": [0, 0, 0, 0, 0, 0]
+        };
+
+        // DOM elements
+        const textInput = document.getElementById('text-input');
+        const brailleOutput = document.getElementById('braille-output');
+        const textOutput = document.getElementById('text-output');
+        const keys = document.querySelectorAll('.braille-key[data-char]');
+        const backspaceBtn = document.getElementById('backspace');
+        const clearBtn = document.getElementById('clear');
+        const convertTextBtn = document.getElementById('convert-text');
+
+        // Add event listeners
+        keys.forEach(key => {
+            key.addEventListener('touchstart', handleKeyPress, {passive: true});
+            key.addEventListener('click', handleKeyPress);
+        });
+
+        backspaceBtn.addEventListener('click', backspace);
+        clearBtn.addEventListener('click', clearInput);
+        convertTextBtn.addEventListener('click', convertToText);
+
+        function handleKeyPress(e) {
+            e.preventDefault();
+            const char = this.getAttribute('data-char');
+            addToInput(char);
+            updateBrailleDots();
+        }
+
+        function addToInput(char) {
+            textInput.value += char;
+            vibrateFeedback();
+        }
+
+        function updateBrailleDots() {
+            brailleOutput.innerHTML = '';
+            const inputText = textInput.value.toLowerCase();
+            
+            for (let char of inputText) {
+                if (brailleAlphabet[char]) {
+                    const container = document.createElement('div');
+                    container.className = 'braille-character-container';
+                    
+                    const dotGrid = document.createElement('div');
+                    dotGrid.className = 'braille-dot-grid';
+                    
+                    // Create 6 dots (2 columns, 3 rows)
+                    for (let i = 0; i < 6; i++) {
+                        const dot = document.createElement('div');
+                        dot.className = 'braille-cell';
+                        if (brailleAlphabet[char][i]) {
+                            dot.classList.add('on');
+                        }
+                        dotGrid.appendChild(dot);
+                    }
+                    
+                    const label = document.createElement('div');
+                    label.className = 'character-label';
+                    label.textContent = char === ' ' ? 'SPACE' : char.toUpperCase();
+                    
+                    container.appendChild(dotGrid);
+                    container.appendChild(label);
+                    brailleOutput.appendChild(container);
+                }
+            }
+        }
+
+        function backspace() {
+            textInput.value = textInput.value.slice(0, -1);
+            vibrateFeedback();
+            updateBrailleDots();
+        }
+
+        function clearInput() {
+            textInput.value = '';
+            brailleOutput.innerHTML = '';
+            textOutput.textContent = 'Press "Convert to Text" button below';
+            vibrateFeedback();
+        }
+
+        function vibrateFeedback() {
+            if ("vibrate" in navigator) {
+                navigator.vibrate(30);
+            }
+        }
+
+        function convertToText() {
+            const inputText = textInput.value.toLowerCase();
+            let englishText = '';
+            
+            for (let char of inputText) {
+                if (char === ' ') {
+                    englishText += ' ';
+                } else if (brailleAlphabet[char]) {
+                    // Find the English equivalent
+                    for (let [engChar, dots] of Object.entries(brailleAlphabet)) {
+                        if (engChar !== ' ' && JSON.stringify(dots) === JSON.stringify(brailleAlphabet[char])) {
+                            englishText += engChar;
+                            break;
+                        }
+                    }
+                }
+            }
+            
+            textOutput.textContent = englishText || 'No text to convert';
+            vibrateFeedback();
+        }
+    </script>
+</body>
+</html>
