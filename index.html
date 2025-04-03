@@ -52,22 +52,23 @@
         }
         .braille-keyboard {
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 8px;
+            grid-template-columns: repeat(10, 1fr);
+            gap: 6px;
         }
         .braille-key {
             background-color: #fff;
             border-radius: 8px;
-            height: 60px;
+            height: 50px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 24px;
+            font-size: 20px;
             cursor: pointer;
             user-select: none;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 3px rgba(0,0,0,0.1);
             transition: all 0.1s;
             touch-action: manipulation;
+            grid-column: span 1;
         }
         .braille-key:active {
             background-color: #ddd;
@@ -76,37 +77,43 @@
         .function-key {
             background-color: #4a90e2;
             color: white;
-            font-size: 18px;
+            font-size: 16px;
         }
         .space-key {
-            grid-column: span 2;
+            grid-column: span 5;
             background-color: #f0f0f0;
             font-size: 16px;
         }
         .backspace-key {
             background-color: #e74c3c;
             color: white;
+            grid-column: span 2;
+        }
+        .enter-key {
+            background-color: #2ecc71;
+            color: white;
+            grid-column: span 2;
         }
         .braille-dots-container {
             display: flex;
             flex-wrap: wrap;
-            gap: 15px;
+            gap: 12px;
             margin-bottom: 15px;
         }
         .braille-character-container {
             display: flex;
             flex-direction: column;
             align-items: center;
-            margin: 5px;
+            margin: 3px;
         }
         .braille-dot-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 6px;
+            gap: 4px;
         }
         .braille-cell {
-            width: 20px;
-            height: 20px;
+            width: 16px;
+            height: 16px;
             border-radius: 50%;
             background-color: #333;
             opacity: 0.2;
@@ -124,14 +131,21 @@
             border-radius: 5px;
             border: 1px solid #eee;
         }
-        @media (max-width: 400px) {
-            .braille-key {
-                height: 50px;
-                font-size: 20px;
+        .keyboard-row {
+            display: contents;
+        }
+        @media (max-width: 600px) {
+            .braille-keyboard {
+                grid-template-columns: repeat(5, 1fr);
             }
-            .braille-cell {
-                width: 16px;
-                height: 16px;
+            .space-key {
+                grid-column: span 5;
+            }
+            .backspace-key {
+                grid-column: span 3;
+            }
+            .enter-key {
+                grid-column: span 2;
             }
         }
     </style>
@@ -152,51 +166,43 @@
         
         <div class="keyboard-container">
             <div class="braille-keyboard">
-                <!-- Row 1 -->
+                <!-- First Row -->
                 <div class="braille-key" data-char="a">⠁</div>
                 <div class="braille-key" data-char="b">⠃</div>
                 <div class="braille-key" data-char="c">⠉</div>
-                <div class="braille-key function-key backspace-key" id="backspace">⌫</div>
-                
-                <!-- Row 2 -->
                 <div class="braille-key" data-char="d">⠙</div>
                 <div class="braille-key" data-char="e">⠑</div>
                 <div class="braille-key" data-char="f">⠋</div>
-                <div class="braille-key function-key" id="clear">Clear</div>
-                
-                <!-- Row 3 -->
                 <div class="braille-key" data-char="g">⠛</div>
                 <div class="braille-key" data-char="h">⠓</div>
                 <div class="braille-key" data-char="i">⠊</div>
-                <div class="braille-key function-key" id="convert-text">To Text</div>
-                
-                <!-- Row 4 -->
                 <div class="braille-key" data-char="j">⠚</div>
+                
+                <!-- Second Row -->
                 <div class="braille-key" data-char="k">⠅</div>
                 <div class="braille-key" data-char="l">⠇</div>
-                <div class="braille-key space-key" data-char=" ">Space</div>
-                
-                <!-- Row 5 -->
                 <div class="braille-key" data-char="m">⠍</div>
                 <div class="braille-key" data-char="n">⠝</div>
                 <div class="braille-key" data-char="o">⠕</div>
                 <div class="braille-key" data-char="p">⠏</div>
-                
-                <!-- Row 6 -->
                 <div class="braille-key" data-char="q">⠟</div>
                 <div class="braille-key" data-char="r">⠗</div>
                 <div class="braille-key" data-char="s">⠎</div>
                 <div class="braille-key" data-char="t">⠞</div>
                 
-                <!-- Row 7 -->
+                <!-- Third Row -->
                 <div class="braille-key" data-char="u">⠥</div>
                 <div class="braille-key" data-char="v">⠧</div>
                 <div class="braille-key" data-char="w">⠺</div>
                 <div class="braille-key" data-char="x">⠭</div>
-                
-                <!-- Row 8 -->
                 <div class="braille-key" data-char="y">⠽</div>
                 <div class="braille-key" data-char="z">⠵</div>
+                <div class="braille-key function-key" id="clear">Clear</div>
+                <div class="braille-key function-key backspace-key" id="backspace">⌫ Backspace</div>
+                <div class="braille-key function-key" id="convert-text">To Text</div>
+                
+                <!-- Space Bar Row -->
+                <div class="braille-key space-key" data-char=" ">Space</div>
             </div>
         </div>
     </div>
